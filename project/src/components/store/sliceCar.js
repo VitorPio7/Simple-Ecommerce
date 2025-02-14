@@ -22,7 +22,7 @@ export const sliceProducts = createSlice({
                     name: newItem.title
                 })
             } else {
-                existingItem.quantity += 1;
+                ++existingItem.quantity;
                 existingItem.totalPrice = existingItem.totalPrice + newItem.price
 
             }
@@ -33,9 +33,11 @@ export const sliceProducts = createSlice({
             if (existingItem > 1) {
                 existingItem.quantity--;
                 existingItem.totalPrice = existingItem.totalPrice - existingItem.price;
+            } else {
+                existingItem.filter((el) => el.id === !id);
             }
         }
     }
 })
 export const { addItem, removeItemCart } = sliceProducts.actions;
-export default sliceProducts.reducer
+export default sliceProducts
