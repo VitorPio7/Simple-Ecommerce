@@ -3,29 +3,33 @@ import Layout from './components/Layout/Layout';
 import Products from './components/Shop/Products';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { sendCartData, fetchData } from './components/store/actionStore';
+import Notification from "./components/UI/Notifications"
+
 function App() {
   let dispatch = useDispatch()
-  let cart = useSelector((el) => el.cart)
+  const notification = useSelector((state) => state.ui.notification);
+  const showCart = useSelector((state) => state.ui.cartIsVisible)
+  let cart = useSelector((store) => store.cart)
   useEffect(() => {
-    async function senData() {
-      try {
-        let response = await fetch('https://new-project-ca1bd-default-rtdb.firebaseio.com/cart.json', {
-          method: 'PUT', body: JSON.stringify(cart)
-        })
-        if (!response.ok) {
-          throw new Error('Sending car data failed.')
-        }
-      } catch (error) {
-        console.error(error)
-      }
+    dispatch(fetchData())
+  }, [dispatch])
+  useEffect(() => {
+    if (cart.change) {
+      dispatch(sendCartData(cart))
     }
-    senData()
-  }, [dispatch, cart])
+  }, [cart, dispatch])
   return (
-    <Layout>
-      <Cart />
-      <Products />
-    </Layout>
+    <>
+      {notification && (<Notification
+        status={notification.status}
+        title={notification.title}
+        message={notification.message} />)}
+      <Layout>
+        {showCart && <Cart />}
+        <Products />
+      </Layout>
+    </>
   );
 }
 
