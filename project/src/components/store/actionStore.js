@@ -1,7 +1,9 @@
 import { showNotification } from './sliceUi';
-import { replaceCart } from './sliceCar'
+import { replaceCart } from './sliceCar';
 
 export function fetchData() {
+
+
     return async dispatch => {
         try {
             let response = await fetch('https://new-project-ca1bd-default-rtdb.firebaseio.com/cart.json')
@@ -13,6 +15,7 @@ export function fetchData() {
                 items: cartData.items || [],
                 totalQuantity: cartData.totalQuantity
             }))
+
 
         } catch (error) {
             dispatch(
